@@ -113,6 +113,20 @@ namespace MvcSample.Web
             return View();
         }
 
+        public ActionResult AddTempData()
+        {
+            TempData["data"] = "This message is from TempData.";
+            return RedirectToAction("UseTempData");
+        }
+
+        public ActionResult UseTempData()
+        {
+            var data = TempData["data"];
+            ViewBag.Tempdata = data;
+
+            return View("MyView", CreateUser());
+        }
+
         /// <summary>
         /// Action that exercises input formatter
         /// </summary>

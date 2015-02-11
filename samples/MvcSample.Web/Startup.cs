@@ -40,6 +40,22 @@ namespace MvcSample.Web
 
                 app.UseServices(services =>
                 {
+                    services.ConfigureAuthorization(auth =>
+                    {
+                        auth.AddPolicy("CanViewPage", 
+                            new AuthorizationPolicyBuilder()
+                                .RequiresClaim("Permission", "CanViewPage", "CanViewAnything").Build());
+                        auth.AddPolicy("CanViewAnything", 
+                            new AuthorizationPolicyBuilder()
+                                .RequiresClaim("Permission", "CanViewAnything").Build());
+                        // This policy basically requires that the auth type is present
+                        var basicPolicy = new AuthorizationPolicyBuilder("Basic").RequiresClaim(ClaimTypes.NameIdentifier);
+                        auth.AddPolicy("RequireBasic", basicPolicy.Build());
+                    });
+
+                    services.AddCachingServices();
+                    services.AddSessionServices();
+
                     services.AddMvc();
                     services.AddSingleton<PassThroughAttribute>();
                     services.AddSingleton<UserNameService>();
@@ -86,6 +102,7 @@ namespace MvcSample.Web
                     services.AddSingleton<PassThroughAttribute>();
                     services.AddSingleton<UserNameService>();
                     services.AddTransient<ITestService, TestService>();
+                    services.AddSessionServices();
                     
                     // Setup services with a test AssemblyProvider so that only the
                     // sample's assemblies are loaded. This prevents loading controllers from other assemblies
@@ -101,6 +118,7 @@ namespace MvcSample.Web
                 });
             }
 
+            app.UseInMemorySession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute("areaRoute", "{area:exists}/{controller}/{action}");

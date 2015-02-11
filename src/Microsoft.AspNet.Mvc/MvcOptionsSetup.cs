@@ -75,6 +75,9 @@ namespace Microsoft.AspNet.Mvc
             options.ValidationExcludeFilters.Add(typeof(Http.IFormCollection));
 
             options.ValidationExcludeFilters.Add(typeFullName: "System.Xml.XmlNode");
+
+            // Add global action filters
+            options.Filters.Add(new TempDataActionFilter());
         }
     }
 }
