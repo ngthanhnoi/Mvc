@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNet.Http.Interfaces;
+using Microsoft.Framework.Internal;
 using Newtonsoft.Json;
 
 namespace Microsoft.AspNet.Mvc
@@ -13,7 +14,7 @@ namespace Microsoft.AspNet.Mvc
     {
         private static string TempDataSessionStateKey = "__ControllerTempData";
 
-        public virtual IDictionary<string, object> LoadTempData([NotNull] ActionExecutingContext context)
+        public virtual IDictionary<string, object> LoadTempData([NotNull] ActionContext context)
         {
             if (!IsSessionEnabled(context))
             {
@@ -38,7 +39,7 @@ namespace Microsoft.AspNet.Mvc
         }
 
 
-        public virtual void SaveTempData([NotNull] ActionExecutedContext context, IDictionary<string, object> values)
+        public virtual void SaveTempData([NotNull] ActionContext context, IDictionary<string, object> values)
         {
             var isDirty = (values != null && values.Count > 0);
             if (isDirty)
@@ -55,9 +56,9 @@ namespace Microsoft.AspNet.Mvc
             }
         }
 
-        private static bool IsSessionEnabled(FilterContext controllerContext)
+        private static bool IsSessionEnabled(ActionContext context)
        {
-            return controllerContext.HttpContext.GetFeature<ISessionFeature>() != null;
+            return context.HttpContext.GetFeature<ISessionFeature>() != null;
         }
     }
 }

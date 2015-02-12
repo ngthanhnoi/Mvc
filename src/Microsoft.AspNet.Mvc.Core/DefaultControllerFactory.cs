@@ -119,6 +119,26 @@ namespace Microsoft.AspNet.Mvc
                     }
                 },
                 {
+                    typeof(TempDataDictionary),
+                    (context) =>
+                    {
+                        var serviceProvider = context.HttpContext.RequestServices;
+                        var tempDataProviderFactory = serviceProvider.GetService<ITempDataProviderFactory>();
+                        ITempDataProvider tempDataProviderInstance = null;
+                        if (tempDataProviderFactory != null)
+                        {
+                            tempDataProviderInstance = tempDataProviderFactory.CreateInstance();
+                        }
+                        else
+                        {
+                            tempDataProviderInstance = serviceProvider.GetService<ITempDataProvider>()
+                                                        ?? new SessionStateTempDataProvider();
+                        }
+
+                        return new TempDataDictionary(context, tempDataProviderInstance);
+                    }
+                },
+                {
                     typeof(ActionBindingContext),
                     (context) =>
                     {

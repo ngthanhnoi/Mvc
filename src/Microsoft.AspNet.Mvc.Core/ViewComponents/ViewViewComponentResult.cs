@@ -28,6 +28,8 @@ namespace Microsoft.AspNet.Mvc
         /// </summary>
         public ViewDataDictionary ViewData { get; set; }
 
+        public TempDataDictionary TempData { get; set; }
+
         /// <summary>
         /// Gets or sets the <see cref="ViewEngine"/>.
         /// </summary>
@@ -90,6 +92,7 @@ namespace Microsoft.AspNet.Mvc
                 context.ViewContext,
                 view,
                 ViewData ?? context.ViewContext.ViewData,
+                TempData ?? context.ViewContext.TempData,
                 context.Writer);
 
             using (view as IDisposable)

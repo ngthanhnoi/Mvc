@@ -32,6 +32,8 @@ namespace Microsoft.AspNet.Mvc
         /// </summary>
         public ViewDataDictionary ViewData { get; set; }
 
+        public TempDataDictionary TempData { get; set; }
+
         /// <summary>
         /// Gets or sets the <see cref="IViewEngine"/> used to locate views.
         /// </summary>
@@ -57,7 +59,7 @@ namespace Microsoft.AspNet.Mvc
 
             using (view as IDisposable)
             {
-                await ViewExecutor.ExecuteAsync(view, context, ViewData, contentType: null);
+                await ViewExecutor.ExecuteAsync(view, context, ViewData, TempData, contentType: null);
             }
         }
     }

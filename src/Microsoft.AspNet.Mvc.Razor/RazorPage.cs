@@ -102,6 +102,15 @@ namespace Microsoft.AspNet.Mvc.Razor
             }
         }
 
+        [Activate]
+        public TempDataDictionary TempData
+        {
+            get
+            {
+                return (ViewContext == null) ? null : ViewContext.TempData;
+            }
+        }
+
         /// <inheritdoc />
         public Action<TextWriter> RenderBodyDelegate { get; set; }
 

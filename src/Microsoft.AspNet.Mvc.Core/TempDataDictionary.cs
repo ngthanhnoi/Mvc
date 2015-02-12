@@ -10,11 +10,17 @@ namespace Microsoft.AspNet.Mvc
     public class TempDataDictionary : IDictionary<string, object>
     {
         private Dictionary<string, object> _data;
+        private bool _loaded;
+        private ITempDataProvider _provider;
+        private ActionContext _context;
         private HashSet<string> _initialKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private HashSet<string> _retainedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        public TempDataDictionary()
+        public TempDataDictionary(ActionContext context, ITempDataProvider provider)
         {
+            _provider = provider;
+            _loaded = false;
+            _context = context;
             _data = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -23,15 +29,9 @@ namespace Microsoft.AspNet.Mvc
             get { return _data.Count; }
         }
 
-        public ICollection<string> Keys
-        {
-            get { return _data.Keys; }
-        }
+        public ICollection<string> Keys => _data.Keys;
 
-        public ICollection<object> Values
-        {
-            get { return _data.Values; }
-        }
+        public ICollection<object> Values => _data.Values;
 
         bool ICollection<KeyValuePair<string, object>>.IsReadOnly
         {
@@ -42,6 +42,7 @@ namespace Microsoft.AspNet.Mvc
         {
             get
             {
+                Load();
                 object value;
                 if (TryGetValue(key, out value))
                 {
@@ -52,6 +53,7 @@ namespace Microsoft.AspNet.Mvc
             }
             set
             {
+                Load();
                 _data[key] = value;
                 _initialKeys.Add(key);
             }
@@ -68,14 +70,20 @@ namespace Microsoft.AspNet.Mvc
             _retainedKeys.Add(key);
         }
 
-        public void Load(ActionExecutingContext context, ITempDataProvider tempDataProvider)
+        public void Load()
         {
-            var providerDictionary = tempDataProvider.LoadTempData(context);
+            if (_loaded)
+            {
+                return;
+            }
+
+            var providerDictionary = _provider.LoadTempData(_context);
             _data = (providerDictionary != null)
                 ? new Dictionary<string, object>(providerDictionary, StringComparer.OrdinalIgnoreCase)
                 : new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             _initialKeys = new HashSet<string>(_data.Keys, StringComparer.OrdinalIgnoreCase);
             _retainedKeys.Clear();
+            _loaded = true;
         }
 
         public object Peek(string key)
@@ -85,8 +93,13 @@ namespace Microsoft.AspNet.Mvc
             return value;
         }
 
-        public void Save(ActionExecutedContext context, ITempDataProvider tempDataProvider)
+        public void Save()
         {
+            if (!_loaded)
+            {
+                return;
+            }
+
             _data.RemoveFromDictionary((KeyValuePair<string, object> entry, TempDataDictionary tempData) =>
             {
                 var key = entry.Key;
@@ -94,7 +107,7 @@ namespace Microsoft.AspNet.Mvc
                     && !tempData._retainedKeys.Contains(key);
             }, this);
 
-            tempDataProvider.SaveTempData(context, _data);
+            _provider.SaveTempData(_context, _data);
         }
 
         public void Add(string key, object value)

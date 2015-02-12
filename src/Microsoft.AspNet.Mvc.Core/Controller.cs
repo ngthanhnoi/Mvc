@@ -23,7 +23,6 @@ namespace Microsoft.AspNet.Mvc
     {
         private DynamicViewData _viewBag;
         private ViewDataDictionary _viewData;
-        private TempDataDictionary _tempData;
         private ActionContext _actionContext;
 
         /// <summary>
@@ -186,21 +185,8 @@ namespace Microsoft.AspNet.Mvc
             }
         }
 
-        public TempDataDictionary TempData
-        {
-            get
-            {
-                if (_tempData == null)
-                {
-                    _tempData = new TempDataDictionary();
-                }
-                return _tempData;
-            }
-            set { _tempData = value; }
-        }
-
         [Activate]
-        public ITempDataProvider TempDataProvider { get; set; }
+        public TempDataDictionary TempData { get; set; }
 
         /// <summary>
         /// Gets the dynamic view bag.
@@ -271,6 +257,7 @@ namespace Microsoft.AspNet.Mvc
             {
                 ViewName = viewName,
                 ViewData = ViewData,
+                TempData = TempData
             };
         }
 
@@ -327,6 +314,7 @@ namespace Microsoft.AspNet.Mvc
             {
                 ViewName = viewName,
                 ViewData = ViewData,
+                TempData = TempData
             };
         }
 

@@ -26,6 +26,7 @@ namespace Microsoft.AspNet.Mvc
         public static async Task ExecuteAsync([NotNull] IView view,
                                               [NotNull] ActionContext actionContext,
                                               [NotNull] ViewDataDictionary viewData,
+                                              [NotNull] TempDataDictionary tempData,
                                               string contentType)
         {
             if (string.IsNullOrEmpty(contentType))
@@ -40,7 +41,7 @@ namespace Microsoft.AspNet.Mvc
             {
                 try
                 {
-                    var viewContext = new ViewContext(actionContext, view, viewData, writer);
+                    var viewContext = new ViewContext(actionContext, view, viewData, tempData, writer);
                     await view.RenderAsync(viewContext);
                 }
                 catch

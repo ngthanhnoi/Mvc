@@ -46,6 +46,11 @@ namespace Microsoft.AspNet.Mvc.Rendering
         ViewDataDictionary ViewData { get; }
 
         /// <summary>
+        /// Gets the current temp data.
+        /// </summary>
+        TempDataDictionary TempData { get; }
+
+        /// <summary>
         /// Returns an anchor (&lt;a&gt;) element that contains a URL path to the specified action.
         /// </summary>
         /// <param name="linkText">The inner text of the anchor element. Must not be <c>null</c>.</param>
