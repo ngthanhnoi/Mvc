@@ -13,6 +13,7 @@ using Microsoft.AspNet.Mvc.TagHelpers.Internal;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Routing;
 using Microsoft.Framework.Logging;
+using Microsoft.Framework.WebEncoders;
 using Moq;
 using Xunit;
 
@@ -45,6 +46,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
 
             var helper = new ScriptTagHelper()
             {
+                HtmlEncoder = new HtmlEncoder(),
                 Logger = logger,
                 ViewContext = viewContext,
                 FallbackSrc = "http://www.example.com/blank.js",
@@ -243,6 +245,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
 
             var helper = new ScriptTagHelper
             {
+                HtmlEncoder = new HtmlEncoder(),
                 Logger = logger,
                 ViewContext = viewContext,
                 FallbackSrc = "~/blank.js",

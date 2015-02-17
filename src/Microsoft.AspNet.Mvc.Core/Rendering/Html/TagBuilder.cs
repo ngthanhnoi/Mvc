@@ -4,18 +4,19 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Text;
 using Microsoft.AspNet.Mvc.Core;
 using Microsoft.Framework.Internal;
+using Microsoft.Framework.WebEncoders;
 
 namespace Microsoft.AspNet.Mvc.Rendering
 {
     public class TagBuilder
     {
         private string _innerHtml;
+        private IHtmlEncoder _htmlEncoder;
 
-        public TagBuilder(string tagName)
+        public TagBuilder(string tagName, IHtmlEncoder htmlEncoder)
         {
             if (string.IsNullOrEmpty(tagName))
             {
@@ -24,6 +25,7 @@ namespace Microsoft.AspNet.Mvc.Rendering
 
             TagName = tagName;
             Attributes = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _htmlEncoder = htmlEncoder;
         }
 
         public IDictionary<string, string> Attributes { get; private set; }
@@ -117,7 +119,7 @@ namespace Microsoft.AspNet.Mvc.Rendering
                     continue;
                 }
 
-                var value = WebUtility.HtmlEncode(attribute.Value);
+                var value = _htmlEncoder.HtmlEncode(attribute.Value);
                 sb.Append(' ')
                     .Append(key)
                     .Append("=\"")
@@ -164,7 +166,7 @@ namespace Microsoft.AspNet.Mvc.Rendering
 
         public void SetInnerText(string innerText)
         {
-            InnerHtml = WebUtility.HtmlEncode(innerText);
+            InnerHtml = _htmlEncoder.HtmlEncode(innerText);
         }
 
         public HtmlString ToHtmlString(TagRenderMode renderMode)

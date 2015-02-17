@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
@@ -14,6 +13,7 @@ using Microsoft.AspNet.PageExecutionInstrumentation;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Internal;
+using Microsoft.Framework.WebEncoders;
 
 namespace Microsoft.AspNet.Mvc.Razor
 {
@@ -60,6 +60,9 @@ namespace Microsoft.AspNet.Mvc.Razor
 
         /// <inheritdoc />
         public bool IsPartial { get; set; }
+
+        [Activate]
+        public IHtmlEncoder HtmlEncoder { get; set; }
 
         /// <inheritdoc />
         public IPageExecutionContext PageExecutionContext { get; set; }
@@ -264,7 +267,7 @@ namespace Microsoft.AspNet.Mvc.Razor
         {
             if (!string.IsNullOrEmpty(value))
             {
-                writer.Write(WebUtility.HtmlEncode(value));
+                writer.Write(HtmlEncoder.HtmlEncode(value));
             }
         }
 

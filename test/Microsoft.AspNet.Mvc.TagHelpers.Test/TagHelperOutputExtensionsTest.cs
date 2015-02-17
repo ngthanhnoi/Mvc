@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
+using Microsoft.Framework.WebEncoders;
 using Xunit;
 
 namespace Microsoft.AspNet.Mvc.TagHelpers
@@ -124,7 +125,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             var expectedAttribute = new KeyValuePair<string, string>("type", "btn");
             tagHelperOutput.Attributes.Add(expectedAttribute);
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
             tagBuilder.Attributes.Add("type", "hello");
 
             // Act
@@ -144,7 +145,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 attributes: new Dictionary<string, string>());
             tagHelperOutput.Attributes.Add("class", "Hello");
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
             tagBuilder.Attributes.Add("class", "btn");
 
             var expectedAttribute = new KeyValuePair<string, string>("class", "Hello btn");
@@ -170,7 +171,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 attributes: new Dictionary<string, string>());
             tagHelperOutput.Attributes.Add(originalName, "Hello");
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
             tagBuilder.Attributes.Add(updateName, "btn");
 
             // Act
@@ -189,7 +190,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 "p",
                 attributes: new Dictionary<string, string>());
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
             var expectedAttribute = new KeyValuePair<string, string>("visible", "val < 3");
             tagBuilder.Attributes.Add(expectedAttribute);
 
@@ -209,7 +210,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 "p",
                 attributes: new Dictionary<string, string>());
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
             var expectedAttribute1 = new KeyValuePair<string, string>("class", "btn");
             var expectedAttribute2 = new KeyValuePair<string, string>("class2", "btn");
             tagBuilder.Attributes.Add(expectedAttribute1);
@@ -236,7 +237,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             var expectedAttribute = new KeyValuePair<string, string>("class", "btn");
             tagHelperOutput.Attributes.Add(expectedAttribute);
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
 
             // Act
             tagHelperOutput.MergeAttributes(tagBuilder);
@@ -256,7 +257,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             var expectedOutputAttribute = new KeyValuePair<string, string>("class", "btn");
             tagHelperOutput.Attributes.Add(expectedOutputAttribute);
 
-            var tagBuilder = new TagBuilder("p");
+            var tagBuilder = new TagBuilder("p", new HtmlEncoder());
             var expectedBuilderAttribute = new KeyValuePair<string, string>("for", "hello");
             tagBuilder.Attributes.Add(expectedBuilderAttribute);
 

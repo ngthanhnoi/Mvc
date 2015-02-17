@@ -26,6 +26,7 @@ namespace Microsoft.Framework.DependencyInjection
         {
             ConfigureDefaultServices(services, configuration);
             services.TryAdd(MvcServices.GetDefaultServices(configuration));
+            services.AddEncoders(configuration);
             return services;
         }
 

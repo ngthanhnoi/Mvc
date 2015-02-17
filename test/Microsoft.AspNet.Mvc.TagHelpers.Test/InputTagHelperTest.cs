@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc.ModelBinding;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
+using Microsoft.Framework.WebEncoders;
 using Moq;
 using Xunit;
 
@@ -169,7 +170,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
 
             var htmlGenerator = new Mock<IHtmlGenerator>(MockBehavior.Strict);
             var tagHelper = GetTagHelper(htmlGenerator.Object, model: false, propertyName: nameof(Model.IsACar));
-            var tagBuilder = new TagBuilder("input")
+            var tagBuilder = new TagBuilder("input", new HtmlEncoder())
             {
                 Attributes =
                 {
@@ -190,7 +191,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                     tagHelper.ViewContext,
                     tagHelper.For.ModelExplorer,
                     tagHelper.For.Name))
-                .Returns(new TagBuilder("hidden"))
+                .Returns(new TagBuilder("hidden", new HtmlEncoder()))
                 .Verifiable();
 
             // Act
@@ -263,7 +264,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             tagHelper.For.Metadata.DataTypeName = dataTypeName;
             tagHelper.InputTypeName = inputTypeName;
 
-            var tagBuilder = new TagBuilder("input")
+            var tagBuilder = new TagBuilder("input", new HtmlEncoder())
             {
                 Attributes =
                 {
@@ -351,7 +352,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             tagHelper.For.Metadata.DataTypeName = dataTypeName;
             tagHelper.InputTypeName = inputTypeName;
 
-            var tagBuilder = new TagBuilder("input")
+            var tagBuilder = new TagBuilder("input", new HtmlEncoder())
             {
                 Attributes =
                 {
@@ -436,7 +437,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             tagHelper.InputTypeName = inputTypeName;
             tagHelper.Value = value;
 
-            var tagBuilder = new TagBuilder("input")
+            var tagBuilder = new TagBuilder("input", new HtmlEncoder())
             {
                 Attributes =
                 {
@@ -536,7 +537,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             tagHelper.For.Metadata.DataTypeName = dataTypeName;
             tagHelper.InputTypeName = inputTypeName;
 
-            var tagBuilder = new TagBuilder("input")
+            var tagBuilder = new TagBuilder("input", new HtmlEncoder())
             {
                 Attributes =
                 {

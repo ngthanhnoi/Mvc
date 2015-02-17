@@ -11,6 +11,7 @@ using Microsoft.AspNet.Mvc.Core;
 using Microsoft.AspNet.Mvc.ModelBinding;
 using Microsoft.AspNet.Mvc.Rendering.Expressions;
 using Microsoft.Framework.Internal;
+using Microsoft.Framework.WebEncoders;
 
 namespace Microsoft.AspNet.Mvc.Rendering
 {
@@ -37,11 +38,17 @@ namespace Microsoft.AspNet.Mvc.Rendering
         public HtmlHelper(
             [NotNull] IHtmlGenerator htmlGenerator,
             [NotNull] ICompositeViewEngine viewEngine,
-            [NotNull] IModelMetadataProvider metadataProvider)
+            [NotNull] IModelMetadataProvider metadataProvider,
+            [NotNull] IHtmlEncoder htmlEncoder,
+            [NotNull] IUrlEncoder urlEncoder,
+            [NotNull] IJavaScriptStringEncoder javaScriptStringEncoder)
         {
             _viewEngine = viewEngine;
             _htmlGenerator = htmlGenerator;
             MetadataProvider = metadataProvider;
+            HtmlEncoder = htmlEncoder;
+            UrlEncoder = urlEncoder;
+            JavaScriptStringEncoder = javaScriptStringEncoder;
         }
 
         /// <inheritdoc />
@@ -105,6 +112,12 @@ namespace Microsoft.AspNet.Mvc.Rendering
                 return ViewContext.ViewData;
             }
         }
+
+        public IHtmlEncoder HtmlEncoder { get; }
+
+        public IUrlEncoder UrlEncoder { get; }
+
+        public IJavaScriptStringEncoder JavaScriptStringEncoder { get; }
 
         /// <inheritdoc />
         public IModelMetadataProvider MetadataProvider { get; private set; }

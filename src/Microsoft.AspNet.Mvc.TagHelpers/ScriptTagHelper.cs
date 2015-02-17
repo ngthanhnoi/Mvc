@@ -3,7 +3,6 @@
 
 using System;
 using System.Globalization;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc.TagHelpers.Internal;
@@ -52,6 +51,9 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
 
         [Activate]
         protected internal ViewContext ViewContext { get; set; }
+
+        [Activate]
+        protected internal IHtmlEncoder HtmlEncoder { get; set; }
 
         /// <inheritdoc />
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -127,7 +129,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             content.Append(" ")
                    .Append(srcKey)
                    .Append("=\\\"")
-                   .Append(WebUtility.HtmlEncode(FallbackSrc))
+                   .Append(HtmlEncoder.HtmlEncode(FallbackSrc))
                    .Append("\\\"");
         }
     }

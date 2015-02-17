@@ -15,6 +15,7 @@ using Microsoft.AspNet.Mvc.TagHelpers.Internal;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Routing;
 using Microsoft.Framework.Logging;
+using Microsoft.Framework.WebEncoders;
 using Moq;
 using Xunit;
 
@@ -100,6 +101,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             var viewContext = MakeViewContext();
             var helper = new LinkTagHelper
             {
+                HtmlEncoder = new HtmlEncoder(),
                 Logger = logger.Object,
                 HostingEnvironment = hostingEnvironment,
                 ViewContext = viewContext,
@@ -142,6 +144,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             var viewContext = MakeViewContext();
             var helper = new LinkTagHelper
             {
+                HtmlEncoder = new HtmlEncoder(),
                 Logger = logger.Object,
                 HostingEnvironment = hostingEnvironment,
                 ViewContext = viewContext,
@@ -306,6 +309,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 .Returns(new[] { "/css/site.css", "/base.css" });
             var helper = new LinkTagHelper
             {
+                HtmlEncoder = new HtmlEncoder(),
                 GlobbingUrlBuilder = globbingUrlBuilder.Object,
                 Logger = logger.Object,
                 HostingEnvironment = hostingEnvironment,

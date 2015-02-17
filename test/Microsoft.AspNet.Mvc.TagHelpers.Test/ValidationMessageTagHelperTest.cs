@@ -9,6 +9,7 @@ using Microsoft.AspNet.Mvc.ModelBinding;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Razor.Runtime.TagHelpers;
 using Microsoft.AspNet.Routing;
+using Microsoft.Framework.WebEncoders;
 using Moq;
 using Xunit;
 
@@ -107,7 +108,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
             generator
                 .Setup(mock =>
                     mock.GenerateValidationMessage(expectedViewContext, "Hello", null, null, null))
-                .Returns(new TagBuilder("span"))
+                .Returns(new TagBuilder("span", new HtmlEncoder()))
                 .Verifiable();
             validationMessageTagHelper.Generator = generator.Object;
             validationMessageTagHelper.ViewContext = expectedViewContext;
@@ -147,7 +148,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 items: new Dictionary<object, object>(),
                 uniqueId: "test",
                 getChildContentAsync: () => Task.FromResult(childContent));
-            var tagBuilder = new TagBuilder("span2")
+            var tagBuilder = new TagBuilder("span2", new HtmlEncoder())
             {
                 InnerHtml = "New HTML"
             };
@@ -200,7 +201,7 @@ namespace Microsoft.AspNet.Mvc.TagHelpers
                 items: new Dictionary<object, object>(),
                 uniqueId: "test",
                 getChildContentAsync: () => Task.FromResult(childContent));
-            var tagBuilder = new TagBuilder("span2")
+            var tagBuilder = new TagBuilder("span2", new HtmlEncoder())
             {
                 InnerHtml = "New HTML"
             };
