@@ -103,7 +103,7 @@ namespace Microsoft.AspNet.Mvc.Razor
                 throw new ArgumentException(Resources.ArgumentCannotBeNullOrEmpty, nameof(viewName));
             }
 
-            var pageResult = GetRazorPageResult(context, viewName);
+            var pageResult = GetRazorPageResult(context, viewName, isPartial: false);
             return CreateViewEngineResult(pageResult, _viewFactory, isPartial: false);
         }
 
@@ -116,7 +116,7 @@ namespace Microsoft.AspNet.Mvc.Razor
                 throw new ArgumentException(Resources.ArgumentCannotBeNullOrEmpty, nameof(partialViewName));
             }
 
-            var pageResult = GetRazorPageResult(context, partialViewName);
+            var pageResult = GetRazorPageResult(context, partialViewName, isPartial: true);
             return CreateViewEngineResult(pageResult, _viewFactory, isPartial: true);
         }
 
@@ -129,11 +129,12 @@ namespace Microsoft.AspNet.Mvc.Razor
                 throw new ArgumentException(Resources.ArgumentCannotBeNullOrEmpty, nameof(pageName));
             }
 
-            return GetRazorPageResult(context, pageName);
+            return GetRazorPageResult(context, pageName, isPartial: true);
         }
 
         private RazorPageResult GetRazorPageResult(ActionContext context,
-                                                   string pageName)
+                                                   string pageName,
+                                                   bool isPartial)
         {
             if (IsApplicationRelativePath(pageName))
             {
@@ -153,12 +154,13 @@ namespace Microsoft.AspNet.Mvc.Razor
             }
             else
             {
-                return LocatePageFromViewLocations(context, pageName);
+                return LocatePageFromViewLocations(context, pageName, isPartial);
             }
         }
 
         private RazorPageResult LocatePageFromViewLocations(ActionContext context,
-                                                            string pageName)
+                                                            string pageName,
+                                                            bool isPartial)
         {
             // Initialize the dictionary for the typical case of having controller and action tokens.
             var routeValues = context.RouteData.Values;
@@ -168,7 +170,7 @@ namespace Microsoft.AspNet.Mvc.Razor
             var viewLocations = !string.IsNullOrEmpty(areaName) ? AreaViewLocationFormats :
                                                                   ViewLocationFormats;
 
-            var expanderContext = new ViewLocationExpanderContext(context, pageName);
+            var expanderContext = new ViewLocationExpanderContext(context, pageName, isPartial);
             if (_viewLocationExpanders.Count > 0)
             {
                 expanderContext.Values = new Dictionary<string, string>(StringComparer.Ordinal);
