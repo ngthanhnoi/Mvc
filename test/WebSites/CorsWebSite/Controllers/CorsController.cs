@@ -3,10 +3,11 @@
 
 using Microsoft.AspNet.Cors.Core;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Security;
 
 namespace CorsWebSite
 {
-    [Route("Cors/[action]")]
+    [Route("Cors/[action]/{id?}")]
     public class CorsController : Controller
     {
         [EnableCors("AllowAnySimpleRequest")]
@@ -18,6 +19,14 @@ namespace CorsWebSite
                 Description = "Dummy Product",
                 Price = 5.0
             };
+        }
+
+        [EnableCors("WithCredentials")]
+        [Authorize]
+        public bool BuyProduct(int id)
+        {
+            // Product bought.
+            return true;
         }
     }
 }

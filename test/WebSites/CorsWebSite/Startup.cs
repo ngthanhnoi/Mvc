@@ -24,24 +24,34 @@ namespace CorsWebSite
 
                 services.ConfigureCors(options =>
                 {
+                    // Simple read.
                     options.AddPolicy(
                         "AllowAnySimpleRequest",
                         (builder) =>
                         {
-                            builder.AddOrigins("*")
+                            builder.AllowAnyOrigin()
                                    .AddMethods("GET")
                                    .AddMethods("POST")
                                    .AddMethods("HEAD");
                         });
 
+                    // A post from a well known origin.
                     options.AddPolicy(
-                        "PreFlight",
+                        "WithCredentials",
                         (builder) =>
                         {
-                            builder.AddOrigins("*");
+                            builder.AddOrigins("http://mobile.Shopping.com/")
+                                   .AddMethods("POST")
+                                   .AllowCredentials();
                         });
 
-                    options.AddPolicy("WithCredentials", (builder) => { builder.AddOrigins("http://foo.com/"); });
+                    options.AddPolicy(
+                        "SimplePreFlight",
+                        (builder) =>
+                        {
+                            builder.AddOrigins("http://foo.com/")
+                                   .AddHeaders("UserAgent");
+                        });
                 });
             });
 
