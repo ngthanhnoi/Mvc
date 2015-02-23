@@ -4,6 +4,7 @@
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.AspNet.Cors.Core;
 
 namespace CorsWebSite
 {

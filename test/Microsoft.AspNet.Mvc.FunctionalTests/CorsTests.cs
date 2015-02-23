@@ -28,12 +28,11 @@ namespace Microsoft.AspNet.Mvc.FunctionalTests
             var server = TestServer.Create(_provider, _app);
             var client = server.CreateClient();
 
-            var requestBuilder = server
-                .CreateRequest("http://localhost/Cors/GetProductInfo")
-                .AddHeader(CorsConstants.Origin, "http://localhost/Cors/GetProductInfo");
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/Cors/GetProductInfo");
+            request.Headers.Add(CorsConstants.Origin, "http://Other/Cors/GetProductInfo");
 
             // Act
-            var response = await requestBuilder.GetAsync();
+            var response = await client.SendAsync(request);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
