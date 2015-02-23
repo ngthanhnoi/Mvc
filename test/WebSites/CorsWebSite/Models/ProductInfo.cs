@@ -3,7 +3,12 @@
 
 namespace CorsWebSite
 {
-    public class Product_Json : Product
+    public class ProductInfo
     {
+        public int Id { get; set; }
+
+        public double Price { get; set; }
+
+        public string Description { get; set; }
     }
 }

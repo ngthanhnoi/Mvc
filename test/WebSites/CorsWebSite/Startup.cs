@@ -20,6 +20,28 @@ namespace CorsWebSite
                 {
                     options.AddXmlDataContractSerializerFormatter();
                 });
+
+                services.ConfigureCors(options =>
+                {
+                    options.AddPolicy(
+                        "AllowAnySimpleRequest",
+                        (builder) =>
+                        {
+                            builder.AddOrigins("*")
+                                   .AddMethods("GET")
+                                   .AddMethods("POST")
+                                   .AddMethods("HEAD");
+                        });
+
+                    options.AddPolicy(
+                        "PreFlight",
+                        (builder) =>
+                        {
+                            builder.AddOrigins("*");
+                        });
+
+                    options.AddPolicy("WithCredentials", (builder) => { builder.AddOrigins("http://foo.com/"); });
+                });
             });
 
             app.UseErrorReporter();

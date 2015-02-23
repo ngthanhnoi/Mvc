@@ -29,16 +29,20 @@ namespace Microsoft.AspNet.Mvc.Filters
         {
             if (context.ActionContext.ActionDescriptor.FilterDescriptors != null)
             {
-                var corsFilter = context.Results.SingleOrDefault(filter => filter.Descriptor.Filter is ICorsPolicyProvider);
-                IEnumerable<FilterItem> results = context.Results;
-                if (corsFilter != null)
+                var corsFilterItem = 
+                    context.Results.SingleOrDefault(filter => filter.Descriptor.Filter is CorsAuthorizationFilter);
+                if (corsFilterItem != null)
                 {
-                    ProvideFilter(context, corsFilter);
-                    results = context.Results.Where(filter => !(filter is ICorsPolicyProvider));
+                    ProvideFilter(context, corsFilterItem);
                 }
 
-                foreach (var item in results)
+                foreach (var item in context.Results)
                 {
+                    if (corsFilterItem != null && corsFilterItem == item)
+                    {
+                        continue;
+                    }
+
                     ProvideFilter(context, item);
                 }
             }

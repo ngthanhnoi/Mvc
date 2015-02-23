@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNet.Cors;
+using Microsoft.AspNet.Cors.Core;
 using Microsoft.AspNet.Mvc.Description;
 using Microsoft.AspNet.Mvc.Filters;
 using Microsoft.AspNet.Mvc.Routing;
@@ -84,11 +85,15 @@ namespace Microsoft.AspNet.Mvc.ApplicationModels
             AddRange(controllerModel.Filters, attributes.OfType<IFilter>());
             AddRange(controllerModel.RouteConstraints, attributes.OfType<IRouteConstraintProvider>());
 
-            //var corsPolicy = _corsOptions.GetPolicy(;
-            //if (corsPolicy != null)
-            //{
-            //    controllerModel.Filters.Add(new AuthorizeFilter(_corsOptions));
-            //}
+            var enableCors = attributes.OfType<EnableCorsAttribute>().SingleOrDefault();
+            if (enableCors != null)
+            {
+                var corsPolicy = _corsOptions.GetPolicy(enableCors.Policy);
+                if (corsPolicy != null)
+                {
+                    controllerModel.Filters.Add(new CorsAuthorizationFilter(corsPolicy));
+                }
+            }
 
             var policy = AuthorizationPolicy.Combine(_authorizationOptions, attributes.OfType<AuthorizeAttribute>());
             if (policy != null)
