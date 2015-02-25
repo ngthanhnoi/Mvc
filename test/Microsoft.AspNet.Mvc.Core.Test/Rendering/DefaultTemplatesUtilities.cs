@@ -205,7 +205,7 @@ namespace Microsoft.AspNet.Mvc.Rendering
                 .Returns(() => innerHelper);
 
             var htmlHelper = new HtmlHelper<TModel>(htmlGenerator, viewEngine, provider);
-            var viewContext = new ViewContext(actionContext, Mock.Of<IView>(), viewData, new StringWriter());
+            var viewContext = new ViewContext(actionContext, Mock.Of<IView>(), viewData, null, new StringWriter());
             htmlHelper.Contextualize(viewContext);
 
             return htmlHelper;

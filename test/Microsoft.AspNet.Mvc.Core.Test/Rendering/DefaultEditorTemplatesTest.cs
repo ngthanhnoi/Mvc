@@ -808,6 +808,11 @@ Environment.NewLine;
                 get { return _innerHelper.ViewData; }
             }
 
+            public TempDataDictionary TempData
+            {
+                get { return _innerHelper.TempData; }
+            }
+
             public void Contextualize([NotNull] ViewContext viewContext)
             {
                 (_innerHelper as ICanHasViewContext)?.Contextualize(viewContext);
