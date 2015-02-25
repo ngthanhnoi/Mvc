@@ -38,7 +38,6 @@ namespace Microsoft.AspNet.Mvc
             return new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
 
-
         public virtual void SaveTempData([NotNull] ActionContext context, IDictionary<string, object> values)
         {
             var isDirty = (values != null && values.Count > 0);

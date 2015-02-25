@@ -1240,6 +1240,7 @@ namespace Microsoft.AspNet.Mvc
         /// <inheritdoc />
         public void Dispose()
         {
+            TempData?.Save();
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
